@@ -22,12 +22,64 @@ model User {
   email         String?         @unique
   emailVerified DateTime?
   image         String?
+  organization  Organization[]
   accounts      Account[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+model Organization {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  ownerId   String   @db.ObjectId
+  stuffs    Stuff[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+}
+
+
+model Stuff {
+  id            String          @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  serviceType   String
+  dailyCapacity Int
+  usedCapacity  Int             @default(0)
+  available     Boolean         @default(true)
+  appoinments   Appoinment[]
+  organization  Organization    @relation(fields: [organizationId], references: [id])
+  organizationId String         @db.ObjectId
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+}
+
+
+model Service {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  appoinments Appoinment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Appoinment {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @db.ObjectId
+  stuffId     String   @db.ObjectId
+  serviceId   String   @db.ObjectId
+  date        DateTime
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  stuff       Stuff    @relation(fields: [stuffId], references: [id], onDelete: Cascade)
+}
+  
 
 
 // Account Model
