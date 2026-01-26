@@ -1,58 +1,55 @@
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
-import { authenticateUser } from "./server/services/auth.service";
-import { signInSchema } from "./lib/zod";
-import { ZodError } from "zod";
-
+import { signInSchema } from "./lib/zod"
+import { ZodError } from "zod"
+import { saltAndHashPassword } from "./utils/password"
+import { getUserFromDb } from "./server/db/user.repository"
+ 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  session:{
-    strategy: "jwt"
+  session: {
+    strategy: "jwt",
   },
-  callbacks: {
-    jwt({ token, user }) {
-      if (user) token.id = user.id
-      return token
-    },
-    session({ session, token }) {
-      session.user.id = token.id as string
-      return session
-    },
-  },
-  providers: [
-    Credentials({
+  providers: [Credentials({
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "email",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "password",
+        },
       },
       authorize: async (credentials) => {
-
-
         try {
+            let user = null
 
-          let user = null;
 
-          const { email, password } = await signInSchema.parseAsync(credentials)
-
-          if (!email && !password) {
-            throw new Error("Email and password are required");
-          }
-          user = await authenticateUser(
-            credentials.email as string,
-            credentials.password as string
-          );
-          if (!user) {
-            throw new Error("Invalid email or password");
-          }
-          return user;
-        } catch (error) {
+        const { email, password } = await signInSchema.parseAsync(credentials)
+ 
+        // logic to salt and hash password
+        const pwHash = await saltAndHashPassword(password as string)
+ 
+        // logic to verify if the user exists
+        user = getUserFromDb(email as string, pwHash)
+ 
+        if (!user) {
+          // No user found, so this is their first attempt to login
+          // Optionally, this is also the place you could do a user registration
+          throw new Error("Invalid credentials.")
+        }
+ 
+        // return user object with their profile data
+        return user
+        }catch (error) {
           if (error instanceof ZodError) {
             // Return `null` to indicate that the credentials are invalid
             return null
           }
           return null
-
         }
-      }
-    })
-  ],
+      }, 
+    }),],
 })
