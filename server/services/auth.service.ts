@@ -16,7 +16,5 @@ export async function authenticateUser(
 
   if (!isValid) return null
 
-  return {
-    user
-  }
+  return user
 }
