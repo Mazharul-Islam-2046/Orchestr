@@ -3,7 +3,7 @@ import Credentials from "next-auth/providers/credentials"
 import { signInSchema } from "./lib/zod"
 import { ZodError } from "zod"
 import { saltAndHashPassword } from "./utils/password"
-import { getUserFromDb } from "./server/db/user.repository"
+import { getUserByEmail } from "./server/actions/auth.actions"
  
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
@@ -33,7 +33,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const pwHash = await saltAndHashPassword(password as string)
  
         // logic to verify if the user exists
-        user = getUserFromDb(email as string, pwHash)
+        user = getUserByEmail(email as string)
  
         if (!user) {
           // No user found, so this is their first attempt to login
