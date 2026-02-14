@@ -1,9 +1,19 @@
+import { prisma } from "@/lib/prisma"
 
-export function getUserFromDb(email: string, pwHash: string) {
-  // Implementation to get user from the database
-  if (!email || !pwHash) {
-    return null
-  }
-  const user = { email, pwHash }
-  return user
+
+
+export const UserRepository = {
+    async getUserById(id: string) {
+        try {
+            const user = await prisma.user.findUnique({
+                where: {
+                    id
+                }
+            })
+            return user
+        } catch (error) {
+            console.log(error)
+            return null
+        }
+    }
 }

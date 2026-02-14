@@ -5,8 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
-  // output   = "../generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
 }
 
 datasource db {
@@ -14,76 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
-
 model User {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String?         @unique
-  emailVerified DateTime?
-  image         String?
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String?
+  email          String?   @unique
+  emailVerified  DateTime?
+  image          String?
   hashedPassword String?
-  organization  Organization[]
-  accounts      Account[]
-  // Optional for WebAuthn support
-  Authenticator Authenticator[]
+  role           String    @default("user")
+  accounts       Account[]
+  sessions       Session[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-
-model Organization {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String   @unique
-  ownerId   String   @db.ObjectId
-  stuffs    Stuff[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  owner User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-}
-
-
-model Stuff {
-  id            String          @id @default(auto()) @map("_id") @db.ObjectId
-  name          String
-  serviceType   String
-  dailyCapacity Int
-  usedCapacity  Int             @default(0)
-  available     Boolean         @default(true)
-  appoinments   Appoinment[]
-  organization  Organization    @relation(fields: [organizationId], references: [id])
-  organizationId String         @db.ObjectId
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
-}
-
-
-model Service {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String?
-  appoinments Appoinment[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
-
-model Appoinment {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId      String   @db.ObjectId
-  stuffId     String   @db.ObjectId
-  serviceId   String   @db.ObjectId
-  date        DateTime
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  service     Service  @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  stuff       Stuff    @relation(fields: [stuffId], references: [id], onDelete: Cascade)
-}
-  
-
-
-// Account Model
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   userId            String  @db.ObjectId
@@ -106,18 +51,13 @@ model Account {
   @@unique([provider, providerAccountId])
 }
 
-// Optional for WebAuthn support
-model Authenticator {
-  credentialID         String  @id @map("_id")
-  userId               String  @db.ObjectId
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, credentialID])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

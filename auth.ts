@@ -1,55 +1,55 @@
-import NextAuth from "next-auth"
-import Credentials from "next-auth/providers/credentials"
-import { signInSchema } from "./lib/zod"
-import { ZodError } from "zod"
-import { saltAndHashPassword } from "./utils/password"
-import { getUserByEmail } from "./server/actions/auth.actions"
- 
+import NextAuth from "next-auth";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { prisma } from "./lib/prisma";
+import authConfig from "./auth.config";
+import { AccountRepository } from "./server/db/account.repository";
+import { UserRepository } from "./server/db/user.repository";
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  session: {
-    strategy: "jwt",
-  },
-  providers: [Credentials({
-      credentials: {
-        email: {
-          label: "Email",
-          type: "email",
-          placeholder: "email",
-        },
-        password: {
-          label: "Password",
-          type: "password",
-          placeholder: "password",
-        },
-      },
-      authorize: async (credentials) => {
-        try {
-            let user = null
+  adapter: PrismaAdapter(prisma),
+  session: { strategy: "jwt" },
+  ...authConfig,
+  callbacks: {
+    async jwt({ token }) {
+      if (!token.sub) return token;
+
+      const existingUser = await UserRepository.getUserById(token.sub);
+
+      if (!existingUser) return token;
+
+      const existingAccount = await AccountRepository.getAccountById(existingUser.id);
 
 
-        const { email, password } = await signInSchema.parseAsync(credentials)
- 
-        // logic to salt and hash password
-        const pwHash = await saltAndHashPassword(password as string)
- 
-        // logic to verify if the user exists
-        user = getUserByEmail(email as string)
- 
-        if (!user) {
-          // No user found, so this is their first attempt to login
-          // Optionally, this is also the place you could do a user registration
-          throw new Error("Invalid credentials.")
-        }
- 
-        // return user object with their profile data
-        return user
-        }catch (error) {
-          if (error instanceof ZodError) {
-            // Return `null` to indicate that the credentials are invalid
-            return null
-          }
-          return null
-        }
-      }, 
-    }),],
-})
+
+      token.isOAuth = !!existingAccount;
+      token.role = existingUser.role;
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      return {
+          ...session,
+          user: {
+            ...session.user,
+            id: token.sub,
+            isOAuth: token.isOAuth,
+            role: token.role
+          },
+        } 
+    },
+
+    async signIn({ user, account }) {
+      if(account?.provider !== "credentials") return true;
+      if (!user.id) return false;
+
+      // const existingUser = await UserRepository.getUserById(user.id);
+
+      // if(!existingUser?.emailVerified) return false;
+
+      return true
+    },
+
+  }
+  
+});
