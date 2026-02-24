@@ -1,8 +1,9 @@
+import { SignInForm } from "@/components/ui/auth/signin-form";
 
-const SignIn = () => {
-    return (
-        <div>SignIn</div>
-    );
-};
-
-export default SignIn;
+export default function Page() {
+  return (
+        <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+              <SignInForm />
+            </div>
+  )
+}
