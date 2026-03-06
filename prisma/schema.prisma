@@ -14,6 +14,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+
+enum Role {
+  STUFF
+  ADMIN
+}
+
+
+
 model User {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
@@ -21,13 +30,14 @@ model User {
   emailVerified  DateTime?
   image          String?
   hashedPassword String?
-  role           String    @default("user")
+  role           Role      @default(STUFF)
   accounts       Account[]
   sessions       Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId

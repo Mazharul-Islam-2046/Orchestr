@@ -1,5 +1,5 @@
 "use client"
-import { Button } from '../button';
+import { Button } from '../ui/button';
 import { signOutUser } from '@/actions/auth';
 
 
