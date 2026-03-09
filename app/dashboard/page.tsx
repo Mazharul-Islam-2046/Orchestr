@@ -1,6 +1,12 @@
-import React from 'react';
+import { auth } from "@/auth";
 
-const Dashboard = () => {
+
+const Dashboard = async () => {
+
+    const user = await auth();
+    console.log("User in Dashboard", user)
+
+
     return (
         <div>
             <h1>Dashboard</h1>

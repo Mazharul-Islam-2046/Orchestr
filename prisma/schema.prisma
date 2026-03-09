@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
   provider = "prisma-client-js"
@@ -31,11 +26,38 @@ model User {
   image          String?
   hashedPassword String?
   role           Role      @default(STUFF)
+  memberships    Membership[]
   accounts       Account[]
   sessions       Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+
+model Restaurant {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  location    String?
+  image       String?
+  memberships Membership[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Membership {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String   @db.ObjectId
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurantId  String   @db.ObjectId
+  role         Role     @default(STUFF)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
 }
 
 

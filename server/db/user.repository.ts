@@ -1,7 +1,5 @@
 import { prisma } from "@/lib/prisma"
 
-
-
 export const UserRepository = {
     async getUserById(id: string) {
         try {

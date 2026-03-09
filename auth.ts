@@ -4,6 +4,7 @@ import { prisma } from "./lib/prisma";
 import authConfig from "./auth.config";
 import { AccountRepository } from "./server/db/account.repository";
 import { UserRepository } from "./server/db/user.repository";
+import { Role } from "@prisma/client";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -34,7 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             ...session.user,
             id: token.sub,
             isOAuth: token.isOAuth,
-            role: token.role
+            role: token.role as Role | null,
           },
         } 
     },
