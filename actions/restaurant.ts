@@ -8,8 +8,7 @@ import { getAuthSession } from "@/lib/utils";
 
 export const createRestaurant = async (data: z.infer<typeof restaurantSchema>) => {
   try {
-    const validatedData = restaurantSchema.parse(data);
-    const restaurantData = validatedData;
+    const restaurantData = restaurantSchema.parse(data);
 
     const session = await getAuthSession();
 
@@ -17,20 +16,17 @@ export const createRestaurant = async (data: z.infer<typeof restaurantSchema>) =
 
     const restaurant = await prisma.restaurant.create({
       data: {
-        ...restaurantData
+        ...restaurantData,
+        memberships: {
+          create: {
+            userId: session.user.id,
+            role: "ADMIN"
+          }
+        }
       },
     });
 
-    // Creating membership
-    const membership = await prisma.membership.create({
-      data: {
-        userId: session?.user?.id as string,
-        role: "ADMIN",
-        restaurantId: restaurant?.id as string
-      }
-    });
-
-    if (!restaurant || !membership) return { error: "Something went wrong during restaurant creation" };
+    if (!restaurant) return { error: "Something went wrong during restaurant creation" };
     return { success: "Restaurant created successfully" };
 
   } catch (error) {
