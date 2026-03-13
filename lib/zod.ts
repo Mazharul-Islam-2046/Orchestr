@@ -14,7 +14,6 @@ export const signInSchema = object({
 });
 
 
-
 export const signUpSchema = object({
   name: string({
     message: "Name is required",
@@ -31,5 +30,13 @@ export const signUpSchema = object({
     message: "Password is required",
   })
     .min(8, "Password must be at least 8 characters long"),
+  })
+
+  export const restaurantSchema = object({
+    name: string({
+      message: "Restaurant name is required",
+    }),
+    description: string().optional(),
+    location: string().optional(),
   })
   

@@ -41,6 +41,7 @@ export function RegisterForm() {
     
     registerUser(data).then((res) => {
       setLoading(false);
+      console.log("Register response:", res);
       if (res.error) {
         setError(res.error);
       }

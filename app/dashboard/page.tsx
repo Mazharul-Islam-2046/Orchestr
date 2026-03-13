@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { CreateRestaurantForm } from "@/components/forms/createRestaurant-form";
 
 
 const Dashboard = async () => {
@@ -10,6 +11,7 @@ const Dashboard = async () => {
     return (
         <div>
             <h1>Dashboard</h1>
+            <CreateRestaurantForm/>
         </div>
     );
 };

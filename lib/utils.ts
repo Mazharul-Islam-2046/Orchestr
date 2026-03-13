@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { AuthError } from "next-auth";
+import { auth } from "@/auth";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -16,4 +17,9 @@ export const handleAuthError = (error: unknown) => {
     }
   }
   throw error;
+};
+
+export const getAuthSession = async () => {
+  const session = await auth();
+  return session;
 };

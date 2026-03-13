@@ -27,6 +27,7 @@ export const registerUser = async (data: z.infer<typeof signUpSchema>) => {
     });
 
     if (!user) return { error: "Something went wrong during registration" };
+    return { success: "User registered successfully" };
 
   } catch (error) {
     console.log(error);
@@ -52,11 +53,14 @@ export const signInUser = async (data: z.infer<typeof signInSchema>) => {
   }
 
 
-  return await signIn("credentials", {
+  const res = await signIn("credentials", {
     email,
     password,
     redirectTo: "/dashboard",
   }).catch(handleAuthError);
+
+  if (res?.error) return { error: res.error };
+  return { success: "Logged in successfully" };
 };
 
 export const signOutUser = async () => {

@@ -6,7 +6,6 @@ import { prisma } from "./lib/prisma";
 import bcrypt from "bcryptjs";
 
 
-
 export default {
     providers: [
         Google({
@@ -18,7 +17,7 @@ export default {
                     name: profile.name,
                     email: profile.email,
                     image: profile.picture,
-                    role: profile.role || "user"
+                    role: profile.role || "STUFF"
                 }
             }
         }),
