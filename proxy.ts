@@ -10,7 +10,7 @@ export default proxy(async (req) => {
     const isLoggedIn = !!req.auth;
     const {nextUrl} = req;
 
-    console.log("Role", req.auth?.user?.role)
+    console.log("Active Restaurant", req.auth?.user?.activeRestaurantId)
 
     const isPrivateRoute = privateRoutes.includes(nextUrl.pathname);
     const isAuthRoute = nextUrl.pathname.includes("/auth");

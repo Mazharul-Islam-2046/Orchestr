@@ -19,11 +19,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (!existingUser) return token;
 
       const existingAccount = await AccountRepository.getAccountById(existingUser.id);
-
+      const membership = await prisma.membership.findFirst({
+        where: {
+          userId: existingUser.id
+        }
+      });
 
 
       token.isOAuth = !!existingAccount;
-      token.role = existingUser.role;
+      token.role = membership?.role;
+      token.activeRestaurantId = membership?.restaurantId;
 
       return token;
     },
@@ -36,6 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             id: token.sub,
             isOAuth: token.isOAuth,
             role: token.role as Role | null,
+            activeRestaurantId: token.activeRestaurantId as string | null
           },
         } 
     },
