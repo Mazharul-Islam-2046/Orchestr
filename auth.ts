@@ -28,7 +28,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
       token.isOAuth = !!existingAccount;
       token.role = membership?.role;
-      token.activeRestaurantId = membership?.restaurantId;
+      token.activeOrganizationId = membership?.organizationId;
 
       return token;
     },
@@ -41,7 +41,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             id: token.sub,
             isOAuth: token.isOAuth,
             role: token.role as Role | null,
-            activeRestaurantId: token.activeRestaurantId as string | null
+            activeOrganizationId: token.activeOrganizationId as string | null
           },
         } 
     },

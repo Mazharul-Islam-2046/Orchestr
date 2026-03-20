@@ -12,12 +12,23 @@ datasource db {
 
 
 enum Role {
-  STUFF
+  STAFF
   ADMIN
 }
 
+enum AppointmentStatus {
+  SCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+enum ServiceStatus {
+  ACTIVE
+  INACTIVE
+}
 
 
+// Auth related models
 model User {
   id             String    @id @default(auto()) @map("_id") @db.ObjectId
   name           String?
@@ -26,40 +37,13 @@ model User {
   image          String?
   hashedPassword String?
   memberships    Membership[]
+  appointments    Appointment[]
   accounts       Account[]
   sessions       Session[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
-
-
-model Restaurant {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String?
-  location    String?
-  image       String?
-  memberships Membership[]
-  
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Membership {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId       String   @db.ObjectId
-  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
-  restaurantId  String   @db.ObjectId
-  role         Role     @default(STUFF)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  @@unique([userId, restaurantId])
-}
-
 
 model Account {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
@@ -93,3 +77,86 @@ model Session {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+
+// Organization related models
+
+model Organization {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  location    String?
+  image       String?
+  memberships Membership[]
+  appointments Appointment[]
+  services     Service[]
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model DesignationType {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  memberships Membership[]
+  services     Service[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Membership {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String   @db.ObjectId
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String   @db.ObjectId
+  role         Role     @default(STAFF)
+  designation  DesignationType? @relation(fields: [designationId], references: [id])
+  designationId String?  @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, organizationId])
+}
+
+
+model Service {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  description    String?
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId  String   @db.ObjectId
+
+  staffType      DesignationType @relation(fields: [staffTypeId], references: [id])
+  staffTypeId    String   @db.ObjectId
+
+  status         ServiceStatus @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Appointment {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String   @db.ObjectId
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId  String   @db.ObjectId
+  date           DateTime
+  description    String?
+  status         AppointmentStatus @default(SCHEDULED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+
+
+
+
+

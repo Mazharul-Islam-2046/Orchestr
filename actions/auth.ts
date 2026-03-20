@@ -33,8 +33,6 @@ export const registerUser = async (data: z.infer<typeof signUpSchema>) => {
     console.log(error);
     return { error: "Internal server error" };
   }
-
-  redirect("/auth/signin");
 };
 
 export const signInUser = async (data: z.infer<typeof signInSchema>) => {
@@ -59,7 +57,7 @@ export const signInUser = async (data: z.infer<typeof signInSchema>) => {
     redirectTo: "/dashboard",
   }).catch(handleAuthError);
 
-  if (res?.error) return { error: res.error };
+  if (res?.error) return { error: "Ungs" };
   return { success: "Logged in successfully" };
 };
 
