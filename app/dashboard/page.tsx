@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import LogoutButton from "@/components/auth/logout-button";
 
 
 const Dashboard = async () => {
@@ -10,6 +11,7 @@ const Dashboard = async () => {
     return (
         <div>
             <h1>Dashboard</h1>
+            <LogoutButton/>
         </div>
     );
 };
