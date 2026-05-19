@@ -30,7 +30,7 @@ export const registerUser = async (data: z.infer<typeof signUpSchema>) => {
     return { success: "User registered successfully" };
 
   } catch (error) {
-    console.log(error);
+    console.log("Error Log: ", error);
     return { error: "Internal server error" };
   }
 };

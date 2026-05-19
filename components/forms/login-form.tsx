@@ -61,10 +61,10 @@ export function LoginForm({
   
 
   return (
-    <div className={cn("flex flex-col gap-6 max-w-2/5", className)} {...props}>
+    <div className={cn("flex flex-col gap-6 w-fit max-w-3/12 mx-auto grow", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Welcome again to Orchestr</CardTitle>
           <CardDescription>
             Enter your email below to login to your account
           </CardDescription>

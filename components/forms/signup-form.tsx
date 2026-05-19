@@ -58,7 +58,7 @@ export function SignupForm({ ...props }: React.ComponentProps<typeof Card>) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-6 w-fit max-w-5/12 mx-auto grow">
       <Card {...props}>
         <CardHeader>
           <CardTitle>Create an account</CardTitle>
