@@ -10,9 +10,9 @@ const handleLogout = () => {
 
 const LogoutButton = () => {
     return (
-        <Button variant='outline' className="w-full" size='sm' onClick={handleLogout}>
+        <div onClick={handleLogout}>
             Logout
-        </Button>
+        </div>
     );
 };
 

@@ -19,6 +19,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { signOutUser } from "@/actions/auth";
+import LogoutButton from "./auth/logout-button";
+
+
+
+const handleLogout = () => {
+  signOutUser();
+};
+
+
+
 
 export function DropdownMenuAvatar() {
   return (
@@ -48,8 +59,8 @@ export function DropdownMenuAvatar() {
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <LogOutIcon />
-          Sign Out
+            <LogOutIcon />
+            <LogoutButton />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
