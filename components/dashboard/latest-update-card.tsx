@@ -1,14 +1,8 @@
 'use client';
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { MoreVertical } from "lucide-react";
+import { Badge } from "../ui/badge";
+import { Clock } from "lucide-react";
 
 interface Doctor {
   id: string;
@@ -23,29 +17,21 @@ export function LatestUpdateCard({ doctor }: { doctor: Doctor }) {
     .toUpperCase();
 
   return (
-    <div className="flex justify-between items-center p-4 rounded-lg border border-border">
+    <div className="flex justify-between items-center">
       <div className="flex gap-4 items-center min-w-0">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" alt={doctor.name} />
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
-        <div className="min-w-0">
-          <p className="font-medium truncate">{doctor.name}</p>
-          <p className="text-sm text-muted-foreground">Available</p>
+        <div className="min-w-0 flex flex-col gap-0.5">
+          <p className="text-sm truncate">{doctor.name}</p>
+          <p className="text-xs text-muted-foreground">A new patient has been added</p>
         </div>
       </div>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <MoreVertical className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>Schedule</DropdownMenuItem>
-          <DropdownMenuItem>View Profile</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <Badge variant="outline">
+            2m ago
+      </Badge>
     </div>
   );
 }

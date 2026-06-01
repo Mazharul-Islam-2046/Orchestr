@@ -1,7 +1,8 @@
 'use client';
 
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { AvailableDoctorCard } from "./available-doctor-card";
+import { LatestUpdateCard } from "./latest-update-card";
+import { Badge } from "../ui/badge";
 
 interface Patient {
   id: string;
@@ -28,16 +29,22 @@ export function LatestUpdates({ data }: { data: Patient[] }) {
 
   return (
     <div className="card bg-card/50 rounded-xl border border-border p-6 flex flex-col gap-6">
-      <div className="flex flex-col gap-1">
-        <h2 className="font-semibold">Available Doctors</h2>
-        <p className="text-sm text-muted-foreground">
-          Doctors available for appointments today
-        </p>
+      <div className="flex justify-between">
+        <div className="flex flex-col gap-1">
+          <h2 className="font-semibold">Latest Updates</h2>
+          <p className="text-sm text-muted-foreground">
+            Recent activities and updates
+          </p>
+        </div>
+
+        <div className="grow flex justify-end items-start">
+          <Badge variant="secondary" className="mt-2">Live</Badge>
+        </div>
       </div>
       <ScrollArea className="h-80">
-        <div className="pr-4 space-y-2">
+        <div className="pr-4 space-y-4">
           {uniqueDoctors.map((doctor) => (
-            <AvailableDoctorCard key={doctor.id} doctor={doctor} />
+            <LatestUpdateCard key={doctor.id} doctor={doctor} />
           ))}
         </div>
       </ScrollArea>
