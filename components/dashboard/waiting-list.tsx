@@ -20,7 +20,7 @@ export function WaitingList({ data }: { data: Patient[] }) {
   return (
     <div className="card bg-card/50 col-span-2 rounded-xl border border-border p-6 flex flex-col gap-6">
       <div className="flex flex-col gap-1">
-        <h2 className="text-lg font-semibold">Waiting List</h2>
+        <h2 className="font-semibold">Waiting List</h2>
         <p className="text-sm text-muted-foreground">
           View the current waiting list and manage appointments
         </p>
