@@ -13,7 +13,7 @@ interface Patient {
   date: string;
 }
 
-export function AvailableDoctors({ data }: { data: Patient[] }) {
+export function LatestUpdates({ data }: { data: Patient[] }) {
   // Get unique doctors from the data
   const uniqueDoctors = Array.from(
     new Map(

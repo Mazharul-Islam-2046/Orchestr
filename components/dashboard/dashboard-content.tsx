@@ -4,6 +4,7 @@ import { SectionCards } from "@/components/section-cards";
 import { DataTable } from "@/components/data-table";
 import { WaitingList } from "./waiting-list";
 import { AvailableDoctors } from "./available-doctors";
+import { LatestUpdates } from "./latest-update";
 
 interface Patient {
   id: string;
@@ -28,6 +29,7 @@ export function DashboardContent({ data }: DashboardContentProps) {
           <div className="px-4 md:px-6 grid grid-cols-1 gap-4 md:grid-cols-4">
             <WaitingList data={data} />
             <AvailableDoctors data={data} />
+            <LatestUpdates data={data} />
           </div>
           <DataTable data={data} />
         </div>
