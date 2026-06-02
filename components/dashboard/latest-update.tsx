@@ -38,7 +38,13 @@ export function LatestUpdates({ data }: { data: Patient[] }) {
         </div>
 
         <div className="grow flex justify-end items-start">
-          <Badge variant="secondary" className="mt-2">Live</Badge>
+          <Badge variant="secondary" className="mt-2 flex items-center gap-1">
+            Live
+            <span className="pulse-dot" aria-hidden>
+              <span className="ring" />
+              <span className="core" />
+            </span>
+          </Badge>
         </div>
       </div>
       <ScrollArea className="h-80">

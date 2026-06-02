@@ -29,6 +29,7 @@ import Image from "next/image";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { CreateAppointmentButton } from "./shared/create-appointment-dialog";
 
 const data = {
   user: {
@@ -110,18 +111,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <SidebarMenuButton tooltip="Create Appointment" asChild>
-          <Button
-            variant="default"
-            size={state === "collapsed" ? "icon" : "default"}
-            className={state === "collapsed" ? "mx-auto" : "w-full gap-2"}
-          >
-            <IconPlus />
-            {state !== "collapsed" ? (
-              <span>Create Appointment</span>
-            ) : (
-              <span className="sr-only">Create Appointment</span>
-            )}
-          </Button>
+          <CreateAppointmentButton state={state} />
         </SidebarMenuButton>
       </SidebarFooter>
     </Sidebar>

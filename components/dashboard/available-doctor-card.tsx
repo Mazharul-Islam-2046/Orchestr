@@ -23,15 +23,15 @@ export function AvailableDoctorCard({ doctor }: { doctor: Doctor }) {
     .toUpperCase();
 
   return (
-    <div className="flex justify-between items-center p-4 rounded-lg border border-border">
+    <div className="flex justify-between items-center py-2.5 px-4 rounded-lg border border-border">
       <div className="flex gap-4 items-center min-w-0">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" alt={doctor.name} />
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
         <div className="min-w-0">
-          <p className="font-medium truncate">{doctor.name}</p>
-          <p className="text-sm text-muted-foreground">Available</p>
+          <p className="text-sm font-medium truncate">{doctor.name}</p>
+          <p className="text-xs text-muted-foreground">Available</p>
         </div>
       </div>
 

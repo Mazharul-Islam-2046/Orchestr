@@ -3,7 +3,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ClockIcon } from "lucide-react";
+import { ClockIcon, LucideDelete } from "lucide-react";
 
 interface Patient {
   id: string;
@@ -22,15 +22,15 @@ export function WaitingListCard({ patient }: { patient: Patient }) {
     .toUpperCase();
 
   return (
-    <div className="grid grid-cols-3 gap-4 items-center p-4 rounded-lg border border-border">
+    <div className="grid grid-cols-3 gap-4 items-center p-4 rounded-lg bg-muted">
       <div className="flex gap-4 items-center min-w-0">
         <Avatar>
           <AvatarImage src="https://github.com/shadcn.png" alt={patient.patientName} />
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
-        <div className="min-w-0">
-          <p className="font-medium truncate">{patient.patientName}</p>
-          <p className="text-sm text-muted-foreground truncate">
+        <div className="min-w-0 space-y-1">
+          <p className="text-sm font-medium truncate">{patient.patientName}</p>
+          <p className="text-xs text-muted-foreground truncate">
             {patient.reason.split(" ").slice(0, 2).join(" ")}
           </p>
         </div>
@@ -65,7 +65,8 @@ export function WaitingListCard({ patient }: { patient: Patient }) {
           size="sm"
           className="text-red-500 border-red-500 hover:bg-red-50"
         >
-          Cancel
+          {/* Cancel */}
+          <LucideDelete className="size-4" />
         </Button>
       </div>
     </div>
